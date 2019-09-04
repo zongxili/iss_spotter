@@ -1,21 +1,19 @@
 // iss_promised.js
-const request = require('request-promise-native');  
 
+// ...
 
-const fetchMyIP = function(callback) {
-  request('https://api.ipify.org?format=json', (error, response, body) => {
-    // .then(){}
-
-
-
-    if (error) return callback(error, null);
-
-    if (response.statusCode !== 200) {
-      callback(Error(`Status Code ${response.statusCode} when fetching IP: ${body}`), null);
-      return;
-    }
-
-    const ip = JSON.parse(body).ip;
-    callback(null, ip);
-  });
+/* 
+ * Input: None
+ * Returns: Promise for fly over data for users location
+ */
+const nextISSTimesForMyLocation = function() {
+  return fetchMyIP()
+    .then(fetchCoordsByIP)
+    .then(fetchISSFlyOverTimes)
+    .then((data) => {
+      const { response } = JSON.parse(data);
+      return response;
+    });
 };
+
+module.exports = { nextISSTimesForMyLocation };
